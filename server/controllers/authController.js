@@ -103,6 +103,41 @@ export const loginUser = async (req, res) => {
   }
 };
 
+//********************REFRESH TOKEN****************** */
+export const refreshToken = async (req, res) => {
+  const { token } = req.body;
+
+  if (!token) return res.status(401).json({ error: "Refresh token missing" });
+
+  try {
+    //Check if token exists in DB
+    const result = await pool.query(
+      "SELECT * FROM refresh_tokens WHERE token = $1",
+      [token]
+    );
+    const storedToken = result.rows[0];
+
+    if (!storedToken) {
+      return res.status(403).json({ error: "Invalid refresh token" });
+    }
+
+    //verify token validity
+    const payload = jwt.verify(token, process.env.REFRESH_SECRET);
+
+    //Issue new access token
+    const accessToken = jwt.sign(
+      { id: payload.id, email: payload.email, role: payload.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    res.status(200).json({ accessToken });
+  } catch (err) {
+    console.error("Refresh token error:", err);
+    return res.status(403).json({ error: "Invalid or expired refresh token" });
+  }
+};
+
 //*********************FORGOT PASSWORD******************* */
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
