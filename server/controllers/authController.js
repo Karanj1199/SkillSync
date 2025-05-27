@@ -2,8 +2,17 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import pool from "../config/db.js";
 import sendResetEmail from "../utils/sendEmail.js";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+//  Load .env from the parent folder (/SkillSync/.env)
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
+
+// const JWT_SECRET = process.env.JWT_SECRET;
 const ACCESS_TOKEN_EXPIRY = "15m";
 const REFRESH_TOKEN_EXPIRY = "7d";
 
@@ -37,7 +46,7 @@ export const registerUser = async (req, res) => {
     //Create JWT
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
-      JWT_SECRET,
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
@@ -73,7 +82,7 @@ export const loginUser = async (req, res) => {
     //Create JWT Token
     const accesToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
-      JWT_SECRET,
+      process.env.JWT_SECRET,
       { expiresIn: ACCESS_TOKEN_EXPIRY }
     );
 

@@ -1,19 +1,31 @@
-import { Pool } from "pg";
-import dotenv from "dotenv";
+// import { Pool } from "pg";
+// import dotenv from "dotenv";
+// import path from "path";
+// import { fileURLToPath } from "url";
 
-dotenv.config();
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+// //  Load .env from the parent folder (/SkillSync/.env)
+// dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
-export default pool;
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL,
+// });
+
+// export default pool;
 
 //2nd method
 // import { Pool } from "pg";
 // import dotenv from "dotenv";
+// import path from "path";
+// import { fileURLToPath } from "url";
 
-// dotenv.config();
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
+// //  Load .env from the parent folder (/SkillSync/.env)
+// dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 // const pool = new Pool({
 //   user: process.env.DB_USER,
@@ -27,14 +39,23 @@ export default pool;
 
 //3rd method
 
-// import { Pool } from "pg";
+import { Pool } from "pg";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
-// const pool = new Pool({
-//   user: "postgres",
-//   password: "Karan2024",
-//   host: "localhost",
-//   port: 5432,
-//   database: "skillsync",
-// });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// export default pool;
+//  Load .env from the parent folder (/SkillSync/.env)
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
+
+const pool = new Pool({
+  user: "postgres",
+  password: "Karan2024",
+  host: "localhost",
+  port: 5432,
+  database: "skillsync",
+});
+
+export default pool;
