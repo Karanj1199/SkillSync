@@ -138,6 +138,23 @@ export const refreshToken = async (req, res) => {
   }
 };
 
+//*********************LOGOUT****************** */
+export const logoutUser = async (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({ error: "Refresh token is required" });
+  }
+
+  try {
+    await pool.query("DELETE FROM refresh_tokens WHERE token = $1", [token]);
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (err) {
+    console.error("Logout error:", err);
+    res.status(500).json({ error: "Failed to logout user" });
+  }
+};
+
 //*********************FORGOT PASSWORD******************* */
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
